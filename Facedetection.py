@@ -13,7 +13,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 path = 'D:\Lahm\JBL\FaceDetectionWithWebcam\Data'
 images = []
 classNames = []
-face_cascade = cv2.CascadeClassifier("models/haarcascade_frontalface_default.xml")
+#face_cascade = cv2.CascadeClassifier("models/haarcascade_frontalface_default.xml")
 myList = os.listdir(path)
 #print(myList)
 MODEL_NAME = 'liveness_model.h5'
