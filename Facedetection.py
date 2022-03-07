@@ -13,7 +13,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 path = 'D:\Lahm\JBL\FaceDetectionWithWebcam\Data'
 images = []
 classNames = []
-#face_cascade = cv2.CascadeClassifier("models/haarcascade_frontalface_default.xml")
+face_cascade = cv2.CascadeClassifier("models/haarcascade_frontalface_default.xml")
 myList = os.listdir(path)
 #print(myList)
 MODEL_NAME = 'liveness_model.h5'
@@ -34,23 +34,26 @@ for cl in myList:
 #print(classNames)
 
 def is_face_live(image):
-     #img = base64_to_numpy(base64_image)
-     img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-     img = crop_roi_mtcnn(img)
-     # cv2.imshow('i2', img)
-     # cv2.waitKey(0)
-     img = preprocess_input(img)
-     img = cv2.resize(img, (224, 224))
-     img = np.expand_dims(img, axis=0)
-     prediction = liveness_model.predict(img)
-     print("Predictions: ", prediction)
-     result_class = np.argmax(prediction)
-     if result_class == liveness_labels['real']:
-         print("Image is real")
-         return True
-     else:
-         print("Image is fake")
-         return False
+	try:
+		img = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+		img = crop_roi_mtcnn(img)
+		#img = base64_to_numpy(base64_image)
+		# cv2.imshow('i2', img)
+		# cv2.waitKey(0)
+		img = preprocess_input(img)
+		img = cv2.resize(img, (224, 224))
+		img = np.expand_dims(img, axis=0)
+		prediction = liveness_model.predict(img)
+		print("Predictions: ", prediction)
+		result_class = np.argmax(prediction)
+		if result_class == liveness_labels['real']:
+			print("Image is real")
+			return True
+		else:
+			print("Image is fake")
+			return False
+	except cv2.error as e:
+		print('Invalid frame!')
 def crop_roi_mtcnn(img):
      face = face_detector_mtcnn.detect_faces(img)
      if len(face) > 0:
